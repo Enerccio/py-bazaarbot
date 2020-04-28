@@ -25,7 +25,7 @@ class HistoryLog(object):
             self._log = {}
             
             for key in source._log:
-                self._log[key] = source._log(key) + []
+                self._log[key] = source._log[key] + []
                 
     def add(self, name, amount):
         if name in self._log:
@@ -58,6 +58,7 @@ class HistoryLog(object):
     
 
 class History(object):
+
     def __init__(self, src=None):
         self._prices = HistoryLog(EcoNoun.PRICE)
         self._asks = HistoryLog(EcoNoun.ASK)

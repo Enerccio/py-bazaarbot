@@ -3,6 +3,7 @@ from bazaarbot.inventory import Inventory
 from bazaarbot.market import Offer
 from bazaarbot import MoneyItems, BazaarBotStaticImports
 
+
 class DefaultAgent(IAgent):
     
     ASK_PRICE_INFLATION = 1.02
@@ -59,7 +60,7 @@ class DefaultAgent(IAgent):
         self._agent_simulation.perform(self, market)
         
     def create_bid(self, market, commodity, limit):
-        ideal = self.determine_purchase_quantity(DefaultAgent.OBSERVE_WINDOW, 
+        ideal = self.determine_purchase_quantity(DefaultAgent.OBSERVE_WINDOW,
                                                  market.get_average_historical_price(commodity, DefaultAgent.DEFAULT_LOOKBACK), commodity)
         
         quantity_to_buy = ideal if ideal > limit else limit
@@ -70,7 +71,7 @@ class DefaultAgent(IAgent):
         return None
     
     def create_ask(self, market, commodity, limit):
-        ideal = self.determine_sale_quantity(DefaultAgent.OBSERVE_WINDOW, 
+        ideal = self.determine_sale_quantity(DefaultAgent.OBSERVE_WINDOW,
                                                  market.get_average_historical_price(commodity, DefaultAgent.DEFAULT_LOOKBACK), commodity)
         
         quantity_to_sell = ideal if ideal > limit else limit
@@ -102,7 +103,6 @@ class DefaultAgent(IAgent):
             for cph in self._commodity_pricing_histories:
                 if cph.get_commodity() == commodity:
                     cph.add_transaction(unit_price)
-    
     
     def add_inventory_item(self, good, amount):
         self._commodity_pricing_histories.append(CommodityPricingHistory(good))
@@ -151,6 +151,9 @@ class DefaultAgent(IAgent):
         
     def __str__(self):
         return self._agent_name
+    
+    def get_agent_name(self):
+        return self._agent_name
         
     
 class AgentSimulation(object):
@@ -163,7 +166,7 @@ class AgentSimulation(object):
         self._rnd = rnd
         
     def perform(self, agent, market):
-        raise NotImplemented
+        raise NotImplementedError()
     
     def produce(self, agent, commodity, amount, chance=1.0):
         if chance >= 1.0 or self._rnd.random():
@@ -175,11 +178,19 @@ class AgentSimulation(object):
     
     def get_name(self):
         return self._name
-
+    
+    def is_idle(self, agent, market):
+        money = agent.get_money_available()
+        money -= 2
+        if money < 0:
+            money = 0.0
+        agent.set_money_available(money)
 
 """
 author: Nick Gritsenko 
 """
+
+
 class AgentSimulator2(object):
     
     def __init__(self, agent, rnd=None):
@@ -188,10 +199,9 @@ class AgentSimulator2(object):
             
         self._agent = agent
         self._rnd = rnd
-        
     
     def simulate_activity(self):
-        raise NotImplemented
+        raise NotImplementedError()
     
     def produce(self, commodity, amount, chance=1.0):
         if chance >= 1.0 or self._rnd.random():
@@ -203,7 +213,6 @@ class AgentSimulator2(object):
     
     def get_name(self):
         return self._agent.get_agent_name()
-    
     
     """Example:
     

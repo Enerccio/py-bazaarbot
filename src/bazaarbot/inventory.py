@@ -2,6 +2,7 @@ from builtins import range
 
 
 class InventoryData(object):
+
     def __init__(self, max_size, ideal, start):
         self._max_size = max_size
         self._ideal = ideal
@@ -39,7 +40,6 @@ class Inventory(object):
         
         def get_original_price(self):
             return self._original_price
-        
     
     def __init__(self, other_inventory=None):
         self._stuff = {}
@@ -59,7 +59,7 @@ class Inventory(object):
         
         for key in data.get_start():
             sizes.append(key)
-            amountsp.append(Inventory.InventoryEntry(data.get_start()[key]), 0)
+            amountsp.append(Inventory.InventoryEntry(data.get_start()[key], 0))
         
         for i in range(len(sizes)):
             self._stuff[sizes[i]] = amountsp[i]
@@ -69,7 +69,7 @@ class Inventory(object):
         
         for key in data.get_ideal():
             sizes.append(key)
-            amounts.add(data.get_ideal()[key])
+            amounts.append(data.get_ideal()[key])
             
         for i in range(len(sizes)):
             self._ideal[sizes[i]] = amounts[i]
@@ -188,11 +188,5 @@ class Inventory(object):
             return ideal - amount
         
         return 0.0
-        
-        
-        
-        
-    
-    
         
             

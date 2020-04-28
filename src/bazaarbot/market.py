@@ -12,19 +12,32 @@ class MarketOperations(object):
 class IOfferExecutor(object):
     
     def execute(self, bid, ask):
-        raise NotImplemented
+        raise NotImplementedError()
     
     def reject_bid(self, offer, unit_price):
-        raise NotImplemented
+        raise NotImplementedError()
     
     def reject_ask(self, offer, unit_price):
-        raise NotImplemented
+        raise NotImplementedError()
 
 
 class IOfferResolver(object):
     
     def resolve(self, executor, bids, asks):
-        raise NotImplemented
+        raise NotImplementedError()
+    
+
+class OfferExecutionStatistics(object):
+    
+    def __init__(self, units_traded, money_traded):
+        self._units_traded = units_traded
+        self._money_traded = money_traded
+    
+    def get_units_traded(self):
+        return self._units_traded
+    
+    def get_money_traded(self):
+        return self._money_traded
     
     
 class DefaultOfferExecutor(IOfferExecutor):
@@ -34,7 +47,6 @@ class DefaultOfferExecutor(IOfferExecutor):
         clearing_price = seller.get_unit_price()
         good = buyer.get_good()
         
-        
         buyer_agent = buyer.get_agent()
         seller_agent = seller.get_agent()
         
@@ -43,6 +55,9 @@ class DefaultOfferExecutor(IOfferExecutor):
         
         buyer_agent.update_price_model(MarketOperations.BUY, buyer.get_good(), True, clearing_price)
         seller_agent.update_price_model(MarketOperations.SELL, seller.get_good(), True, clearing_price)
+        
+        money_traded = (quantity_traded * clearing_price);
+        return OfferExecutionStatistics(quantity_traded, money_traded)
         
     def reject_bid(self, buyer, unit_price):
         buyer.get_agent().update_price_model(MarketOperations.BUY, buyer.get_good(), False, unit_price)
@@ -99,19 +114,6 @@ class Offer(object):
         return "(" + str(self._agent) + "): " + str(self._commodity) + "x " + str(self._units) + "@ " + str(self._unit_price)
     
     
-class OfferExecutionStatistics(object):
-    
-    def __init__(self, units_traded, money_traded):
-        self._units_traded = units_traded
-        self._money_traded = money_traded
-    
-    def get_units_traded(self):
-        return self._units_traded
-    
-    def get_money_traded(self):
-        return self._money_traded
-    
-    
 class OfferResolutionStatistics(object):
     
     def __init__(self, resolved_offers):
@@ -151,7 +153,7 @@ class DefaultOfferResolver(IOfferResolver):
         
     @staticmethod
     def sort_offers(offers):
-        offers.sort(key=Offer.get_unit_price)
+        offers.sort(key=lambda x: x.get_unit_price())
         
     def resolve(self, executor, bids, asks):
         result = {}
@@ -258,7 +260,6 @@ class Market(object):
                 
                 for commodity in self._good_types:
                     agent.generate_offers(self, commodity)
-            
             
             self.resolve_offers()
             
@@ -417,7 +418,7 @@ class Market(object):
                 self._history.get_prices().add(key, self._history.get_prices().average(key, 1))
         
         ag = [] + self._agents
-        ag.sorted(key=IAgent.get_agent_name)
+        ag.sort(key=lambda x: x.get_agent_name())
         
         curr_class = ""
         last_class = ""

@@ -18,7 +18,7 @@ class Economy(ISignalBankrupt):
         
     def add_market(self, market):
         if market not in self._markets:
-            self.markets.append(market)
+            self._markets.append(market)
     
     def get_market(self, name):
         for market in self._markets:

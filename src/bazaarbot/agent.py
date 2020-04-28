@@ -4,67 +4,67 @@ from builtins import range
 class IAgent(object):
     
     def simulate(self, market):
-        raise NotImplemented
+        raise NotImplementedError()
     
     def create_bid(self, market, commodity, limit):
-        raise NotImplemented
+        raise NotImplementedError()
     
     def create_ask(self, market, commodity, limit):
-        raise NotImplemented
+        raise NotImplementedError()
     
     def generate_offers(self, market, commodity):
-        raise NotImplemented
+        raise NotImplementedError()
     
     def update_price_model(self, act, commodity, success, unit_price):
-        raise NotImplemented
+        raise NotImplementedError()
     
     def add_inventory_item(self, good, amount):
-        raise NotImplemented
+        raise NotImplementedError()
     
     def query_inventory(self, commodity):
-        raise NotImplemented
+        raise NotImplementedError()
     
     def produce_inventory(self, good, delta):
-        raise NotImplemented
+        raise NotImplementedError()
     
     def consume_inventory_item(self, commodity, amount):
-        raise NotImplemented
+        raise NotImplementedError()
     
     def change_inventory(self, commodity, amount, unit_cost):
-        raise NotImplemented
+        raise NotImplementedError()
     
     def get_snapshot(self):
-        raise NotImplemented
+        raise NotImplementedError()
     
     def is_inventory_full(self):
-        raise NotImplemented
+        raise NotImplementedError()
     
     def get_last_simulate_profit(self):
-        raise NotImplemented
+        raise NotImplementedError()
     
     def get_agent_name(self):
-        raise NotImplemented
+        raise NotImplementedError()
     
     def get_money_available(self):
-        raise NotImplemented
+        raise NotImplementedError()
     
     def set_money_available(self, value):
-        raise NotImplemented
+        raise NotImplementedError()
     
 
 class IAgentClass(object):
     
     def get_name(self):
-        raise NotImplemented
+        raise NotImplementedError()
     
     def get_factory(self):
-        raise NotImplemented
+        raise NotImplementedError()
     
 
 class IAgentFactory(object):
     
     def create(self):
-        raise NotImplemented
+        raise NotImplementedError()
     
     
 class CommodityPricingRange(object):
@@ -159,17 +159,5 @@ class AgentSnapshot(object):
     
     def get_inventory(self):
         return self._inventory
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     

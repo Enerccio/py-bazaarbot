@@ -1,21 +1,21 @@
 
+
 class IContract(object):
     
     def complete(self):
-        raise NotImplemented
+        raise NotImplementedError()
     
     def abandon(self):
-        raise NotImplemented
+        raise NotImplementedError()
     
 
 class IContractResolver(object):
     
     def new_contract(self, provider, receiver, good, units, clearing_price):
-        raise NotImplemented
-    
+        raise NotImplementedError()
     
     def get_quote(self, source, dest, space):
-        raise NotImplemented
+        raise NotImplementedError()
     
 
 class ContractQuote(object):
